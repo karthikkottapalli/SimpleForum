@@ -1,0 +1,5 @@
+<%= form_for [@post, @comment] do |f| %>
+  <%= f.hidden_field :ancestry, value: @comment.ancestry %>
+  <%= f.text_field :body %>
+  <%= f.submit %>
+<% end %>
