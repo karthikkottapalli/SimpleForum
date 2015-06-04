@@ -1,5 +1,7 @@
-<%= form_for [@post, @comment] do |f| %>
-  <%= f.hidden_field :ancestry, value: @comment.ancestry %>
-  <%= f.text_field :body %>
-  <%= f.submit %>
-<% end %>
+<div class="container">
+  <%= bootstrap_form_for [@post, @comment] do |f| %>
+    <%= f.hidden_field :ancestry, value: @comment.ancestry %>
+    <%= f.text_field :body, label: "~" %>
+    <%= f.submit %>
+  <% end %>
+</div>

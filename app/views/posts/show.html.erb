@@ -1,32 +1,34 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
+    <div class="alert alert-info" role="alert">
+      <h3><%= @post.title %></h3>
+      <%= @post.body %>
+    </div>
 
-<p>
-  <strong>Body:</strong>
-  <%= @post.body %>
-</p>
-<%= form_for [@post, @post.comments.new] do |f| %>
-  <%= f.text_field :body %>
-  <%= f.submit %>
-<% end %>
-  
+  <% @post.comments.reverse_each do |comment| %>
+     <% comment.save %>
+      <% if comment.ancestry? %>
+          <div class="alert alert-info" role="alert">
+              <%= comment.parent.body %>
+          </div>    
+          <div class="special-container">
+            <div class="alert alert-warning" role="alert">
+               <%= comment.body %>
+             </div>  
+          </div>     
+      <% elsif comment.is_childless?  %>
+          <div class="alert alert-info" role="alert">
+             <%= comment.body %>
+             <u><%= link_to "reply", new_post_comment_path(@post) + "?param1="+comment.id.to_s %></u>
+          </div>   
+        <% end %>
+  <% end %>
 
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
-
-<% @post.comments.each do |comment| %>
-  <hr> <% comment.save %>
-    <% if comment.ancestry? %>
-      <%= comment.parent.body %>
-      **** <%= comment.body %>
-    <% elsif comment.is_childless?  %>
-        <%= comment.body %>
-        <%= link_to "Reply", new_post_comment_path(@post) + "?param1="+comment.id.to_s %>  
-      <% end %>
-  <hr>
-<% end %>
+  <%= bootstrap_form_for([@post, @post.comments.new]) do |f| %>
+    <%= f.text_area :body, label: "~", :rows => 10, :cols => 50 %>
+    <%= f.submit "Reply" %>
+  <% end %>
+    
+</div>
 
